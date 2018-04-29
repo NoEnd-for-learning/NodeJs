@@ -32,8 +32,24 @@ app.get('/', (req, res) => {
   res.redirect('/spa.html')
 })
 
-app.get('/hi', (req, res) => {
-  res.send('tShu, this is route hi')
+// 模拟get
+app.get('/user/list', (req, res) => {
+  res.contentType('json')
+  res.send({ title: 'user list' })
+})
+
+// 模拟post
+app.post('/user/create', (req, res) => {
+  res.contentType('json')
+  res.send({ title: 'user created' })
+})
+
+// 添加创建用户对象的路由
+app.get('/user/read/:id([0-9]+)', (req, res) => {
+  res.contentType('json')
+  res.send({
+    title: `user with id ${req.params.id} found`
+  })
 })
 
 server.listen(3004)
