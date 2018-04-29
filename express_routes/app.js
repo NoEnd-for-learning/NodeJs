@@ -13,6 +13,7 @@ const server = http.createServer(app)
 app.configure(() => {
   app.use(express.bodyParser()) // 对表单进行解码
   app.use(express.methodOverride()) // 创建RESTful 服务
+  app.use(express.basicAuth('user', 'spa')) // 添加基本认证中间件
   app.use(express.static(__dirname + '/public'))
   app.use(app.router)
 })
