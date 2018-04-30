@@ -6,6 +6,8 @@
 
 const mongodb = require('mongodb')
 
+const fsHandle = require('fs')
+
 const server = new mongodb.Server('localhost', 27017)
 
 const db = new mongodb.Db('spa', server)
@@ -13,6 +15,16 @@ const db = new mongodb.Db('spa', server)
 const makeMongoId = mongodb.ObjectID // 方便操作
 
 const objTypeMap = { 'user': {} }
+
+/* 在路由中加载schema */
+// -------- begin utility methods --------
+const loadSchema = function (schema_name, schema_path) {
+  fsHandle.readFile(schema_path, 'utf8', function (err, data) {
+    objTypeMap[schema_name] = JSON.parse(data)
+  })
+}
+
+// -------- end utility methods --------
 
 const configRoutes = (app, server) => {
   app.get('/', (req, res) => {
@@ -136,4 +148,15 @@ db.open(() => {
   console.log(`** Connected to MongoDB **`)
 })
 
-// -------- end module initialization ---------
+// -------- end module initialization ---------s
+const func = function () {
+  var schema_name, schema_path
+  for (schema_name in objTypeMap) {
+    if (objTypeMap.hasOwnProperty(schema_name)) {
+      schema_path = __dirname + '/' + schema_name + '.json'
+      loadSchema(schema_name, schema_path)
+    }
+  }
+}
+
+func()

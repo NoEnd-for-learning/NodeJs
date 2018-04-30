@@ -9,6 +9,7 @@
   "author": "tShu",
   "license": "ISC",
   "dependencies": {
+    "JSV": "^4.0.2",
     "express": "^3.2.6",
     "mongodb": "^2.2.28"
   }
