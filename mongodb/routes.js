@@ -12,6 +12,8 @@ const db = new mongodb.Db('spa', server)
 
 const makeMongoId = mongodb.ObjectID // 方便操作
 
+const objTypeMap = { 'user': {} }
+
 const configRoutes = (app, server) => {
   app.get('/', (req, res) => {
     res.redirect('/spa.html')
@@ -19,7 +21,15 @@ const configRoutes = (app, server) => {
 
   app.all('/:obj_type/*?', (req, res, next) => {
     res.contentType('json')
-    next()
+    // 如果对象类型（:obj_type）在对象类型映射中没有定义，则发送一个JSON 响应，告诉客户端是一个无效的路由。
+    if (objTypeMap[req.params.obj_type]) {
+      next()
+    } else {
+      res.send({
+        error_msg: req.params.obj_type + ' is not a valid object type.'
+      })
+    }
+    // next()
   })
 
   app.get('/:obj_type/list', (req, res) => {
